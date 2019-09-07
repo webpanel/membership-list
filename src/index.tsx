@@ -1,10 +1,11 @@
 import * as React from 'react';
 
-import { Button, List, Popconfirm, Popover, Select } from 'antd';
+import { Button, Select } from 'antd';
 import { Form, FormFieldDecorator } from 'webpanel-antd';
 import { Mutation, MutationFunction, Query, QueryResult } from 'react-apollo';
 
 import { FormContext } from 'webpanel-antd/lib/form/form/Form';
+import { MembershipListComponent } from './list';
 import { SelectProps } from 'antd/lib/select';
 import gql from 'graphql-tag';
 
@@ -76,9 +77,16 @@ export class MembershipList extends React.Component<
         {(deleteMembership: MutationFunction<any, any>) => (
           <Query query={MEMBERSHIPS_QUERY} variables={{ entity, entityID }}>
             {({ data, loading, refetch }: QueryResult<any>) => (
-              <List
-                size="small"
+              <MembershipListComponent
                 loading={loading}
+                memberships={data.memberships}
+                roles={roles || []}
+                onDelete={async id => {
+                  await deleteMembership({
+                    variables: { id }
+                  });
+                  refetch();
+                }}
                 footer={
                   <Mutation mutation={INVITE_MEMBER}>
                     {(inviteMember: MutationFunction<any, any>) => (
@@ -144,50 +152,6 @@ export class MembershipList extends React.Component<
                     )}
                   </Mutation>
                 }
-                bordered={false}
-                dataSource={data.memberships}
-                itemLayout="horizontal"
-                renderItem={(item: any) => {
-                  return (
-                    <List.Item
-                      actions={[
-                        <Popconfirm
-                          key="delete"
-                          title="Are you sure?"
-                          okText="Yes"
-                          cancelText="No"
-                          icon="user"
-                          onConfirm={async () => {
-                            await deleteMembership({
-                              variables: { id: item.id }
-                            });
-                            refetch();
-                          }}
-                        >
-                          <Button
-                            key="delete"
-                            icon="delete"
-                            size="small"
-                            type="danger"
-                          />
-                        </Popconfirm>
-                      ]}
-                    >
-                      <List.Item.Meta
-                        title={
-                          <Popover content={`ID: ${item.member.id}`}>
-                            {item.member.email}
-                          </Popover>
-                        }
-                      />
-                      {this.rolesSelect({
-                        roles,
-                        value: item.role,
-                        props: { size: 'small', disabled: true }
-                      })}
-                    </List.Item>
-                  );
-                }}
               />
             )}
           </Query>
