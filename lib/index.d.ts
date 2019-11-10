@@ -1,5 +1,5 @@
 import * as React from 'react';
-interface IMembershipListRole {
+export interface IMembershipListRole {
     id: string;
     name: string;
 }

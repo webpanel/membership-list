@@ -9,7 +9,7 @@ import { MembershipListComponent } from './list';
 import { SelectProps } from 'antd/lib/select';
 import gql from 'graphql-tag';
 
-interface IMembershipListRole {
+export interface IMembershipListRole {
   id: string;
   name: string;
 }
