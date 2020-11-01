@@ -1,8 +1,8 @@
-import * as React from 'react';
+import * as React from "react";
 
-import { Button, List, Popconfirm, Popover, Select } from 'antd';
+import { Button, List, Popconfirm, Popover, Select } from "antd";
 
-import { SelectProps } from 'antd/lib/select';
+import { SelectProps } from "antd/lib/select";
 
 interface IMembershipListRole {
   id: string;
@@ -49,7 +49,7 @@ export class MembershipListComponent extends React.Component<
                   icon="user"
                   onConfirm={() => {
                     if (onDelete) {
-                      (async function() {
+                      (async function () {
                         await onDelete(item.id);
                       })();
                     }
@@ -59,9 +59,9 @@ export class MembershipListComponent extends React.Component<
                     key="delete"
                     icon="delete"
                     size="small"
-                    type="danger"
+                    danger={true}
                   />
-                </Popconfirm>
+                </Popconfirm>,
               ]}
             >
               <List.Item.Meta
@@ -74,7 +74,7 @@ export class MembershipListComponent extends React.Component<
               {this.rolesSelect({
                 roles,
                 value: item.role,
-                props: { size: 'small', disabled: true }
+                props: { size: "small", disabled: true },
               })}
             </List.Item>
           );
@@ -86,12 +86,12 @@ export class MembershipListComponent extends React.Component<
   private rolesSelect(props: {
     roles?: IMembershipListRole[];
     value?: string;
-    props?: SelectProps;
+    props?: SelectProps<any>;
   }): React.ReactNode | undefined {
     return (
       props.roles && (
-        <Select value={props.value} style={{ width: '120px' }} {...props.props}>
-          {props.roles.map(r => (
+        <Select value={props.value} style={{ width: "120px" }} {...props.props}>
+          {props.roles.map((r) => (
             <Select.Option value={r.id}>{r.name}</Select.Option>
           ))}
         </Select>

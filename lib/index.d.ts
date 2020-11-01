@@ -1,4 +1,4 @@
-import * as React from 'react';
+/// <reference types="react" />
 export interface IMembershipListRole {
     id: string;
     name: string;
@@ -8,12 +8,5 @@ interface IMembershipListProps {
     entityID: string;
     roles?: IMembershipListRole[];
 }
-interface IMembershipListState {
-    inviting: boolean;
-}
-export declare class MembershipList extends React.Component<IMembershipListProps, IMembershipListState> {
-    state: IMembershipListState;
-    render(): JSX.Element;
-    private rolesSelect;
-}
+export declare const MembershipList: (props: IMembershipListProps) => JSX.Element;
 export {};

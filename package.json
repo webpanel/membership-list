@@ -27,20 +27,16 @@
     "@storybook/addons": "^5.1.11",
     "@storybook/react": "^5.1.11",
     "@types/graphql": "^14.2.3",
-    "@types/react": "^16.8.24",
-    "@types/react-dom": "^16.8.5",
-    "ant-design-pro": "^2.2.1",
-    "antd": "^3.20.7",
+    "@types/react-router-dom": "^5.1.6",
+    "antd": "^4.7.3",
     "apollo-client": "^2.6.4",
     "babel-loader": "^8.0.6",
     "graphql": "^14.4.2",
     "graphql-tag": "^2.10.1",
-    "mobx": "^5.13.0",
-    "mobx-react": "^6.1.3",
     "react-apollo": "^3.0.1",
-    "typescript": "^3.5.3",
-    "webpanel-antd": "0.0.32",
-    "webpanel-auth": "0.0.25",
-    "webpanel-data": "0.0.45"
+    "react-router-dom": "^5.2.0",
+    "typescript": "^4.0.5",
+    "webpanel-antd": "git+https://github.com/webpanel/antd.git",
+    "webpanel-data": "^0.2.7"
   }
 }
