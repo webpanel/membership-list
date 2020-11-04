@@ -94,117 +94,60 @@ export const MembershipList = (props: IMembershipListProps) => {
                 refetch();
               }}
               footer={
-                <Mutation mutation={INVITE_MEMBER}>
-                  {(inviteMember: MutationFunction<any, any>) => (
-                    <Form
-                      onFinish={async (values) => {
-                        setInviting(true);
-                        try {
-                          await Promise.all(
-                            values.members.map((m: string) =>
-                              inviteMember({
-                                variables: {
-                                  email: m,
-                                  role: values.role,
-                                  entity,
-                                  entityID,
-                                },
-                              })
-                            )
-                          );
-                        } catch (e) {
-                          global.console.log("failed to add", e);
-                        } finally {
-                          setInviting(false);
-                          form.resetFields();
-                        }
-                        refetch();
-                      }}
-                    >
-                      <Form.Item>
-                        <Select
-                          mode="tags"
-                          style={{ width: "250px" }}
-                          // size=""
-                          notFoundContent=""
-                          tokenSeparators={[" ", ","]}
-                          placeholder="type email addreses"
-                        />
-                      </Form.Item>
-                      {roles && (
-                        <Form.Item label="role" rules={[{ required: true }]}>
-                          {rolesSelect({ roles })}
-                        </Form.Item>
-                      )}{" "}
-                      <Button
-                        type="primary"
-                        htmlType="submit"
-                        loading={inviting}
+                <div style={{ padding: "8px 16px" }}>
+                  <Mutation mutation={INVITE_MEMBER}>
+                    {(inviteMember: MutationFunction<any, any>) => (
+                      <Form
+                        onFinish={async (values) => {
+                          setInviting(true);
+                          try {
+                            await Promise.all(
+                              values.members.map((m: string) =>
+                                inviteMember({
+                                  variables: {
+                                    email: m,
+                                    role: values.role,
+                                    entity,
+                                    entityID,
+                                  },
+                                })
+                              )
+                            );
+                          } catch (e) {
+                            global.console.log("failed to add", e);
+                          } finally {
+                            setInviting(false);
+                            form.resetFields();
+                          }
+                          refetch();
+                        }}
                       >
-                        Add
-                      </Button>
-                    </Form>
-                    // <Form
-                    //   onSave={async (values: any, context: FormContext) => {
-                    //     this.setState({ inviting: true });
-                    //     try {
-                    //       await Promise.all(
-                    //         values.members.map((m: string) =>
-                    //           inviteMember({
-                    //             variables: {
-                    //               email: m,
-                    //               role: values.role,
-                    //               entity,
-                    //               entityID,
-                    //             },
-                    //           })
-                    //         )
-                    //       );
-                    //     } catch (e) {
-                    //       global.console.log("failed to add", e);
-                    //     } finally {
-                    //       this.setState({ inviting: false });
-                    //       context.form.resetFields();
-                    //     }
-                    //     refetch();
-                    //   }}
-                    //   render={(context: FormContext) => (
-                    //     <>
-                    //       <FormFieldDecorator
-                    //         name="members"
-                    //         formContext={context}
-                    //         rules={[{ required: true }]}
-                    //       >
-                    //         <Select
-                    //           mode="tags"
-                    //           style={{ width: "250px" }}
-                    //           // size=""
-                    //           notFoundContent=""
-                    //           tokenSeparators={[" ", ","]}
-                    //           placeholder="type email addreses"
-                    //         />
-                    //       </FormFieldDecorator>{" "}
-                    //       {roles && (
-                    //         <FormFieldDecorator
-                    //           name="role"
-                    //           rules={[{ required: true }]}
-                    //           formContext={context}
-                    //         >
-                    //           {this.rolesSelect({ roles })}
-                    //         </FormFieldDecorator>
-                    //       )}{" "}
-                    //       <Button
-                    //         type="primary"
-                    //         htmlType="submit"
-                    //         loading={this.state.inviting}
-                    //       >
-                    //         Add
-                    //       </Button>
-                    //     </>
-                    //   )}
-                    // />
-                  )}
-                </Mutation>
+                        <Form.Item>
+                          <Select
+                            mode="tags"
+                            style={{ width: "250px" }}
+                            // size=""
+                            notFoundContent=""
+                            tokenSeparators={[" ", ","]}
+                            placeholder="type email addreses"
+                          />
+                        </Form.Item>
+                        {roles && (
+                          <Form.Item label="role" rules={[{ required: true }]}>
+                            {rolesSelect({ roles })}
+                          </Form.Item>
+                        )}{" "}
+                        <Button
+                          type="primary"
+                          htmlType="submit"
+                          loading={inviting}
+                        >
+                          Add
+                        </Button>
+                      </Form>
+                    )}
+                  </Mutation>
+                </div>
               }
             />
           )}
