@@ -98,6 +98,7 @@ export const MembershipList = (props: IMembershipListProps) => {
                   <Mutation mutation={INVITE_MEMBER}>
                     {(inviteMember: MutationFunction<any, any>) => (
                       <Form
+                        form={form}
                         onFinish={async (values) => {
                           setInviting(true);
                           try {
@@ -122,7 +123,7 @@ export const MembershipList = (props: IMembershipListProps) => {
                           refetch();
                         }}
                       >
-                        <Form.Item>
+                        <Form.Item name="members">
                           <Select
                             mode="tags"
                             style={{ width: "250px" }}
@@ -133,7 +134,11 @@ export const MembershipList = (props: IMembershipListProps) => {
                           />
                         </Form.Item>
                         {roles && (
-                          <Form.Item label="role" rules={[{ required: true }]}>
+                          <Form.Item
+                            label="role"
+                            rules={[{ required: true }]}
+                            name="role"
+                          >
                             {rolesSelect({ roles })}
                           </Form.Item>
                         )}{" "}
