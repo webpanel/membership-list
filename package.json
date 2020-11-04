@@ -10,7 +10,9 @@
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook"
   },
-  "dependencies": {},
+  "dependencies": {
+    "@ant-design/icons": "^4.2.2"
+  },
   "peerDependencies": {
     "antd": "*",
     "webpanel-antd": "*",
@@ -36,7 +38,7 @@
     "react-apollo": "^3.0.1",
     "react-router-dom": "^5.2.0",
     "typescript": "^4.0.5",
-    "webpanel-antd": "git+https://github.com/webpanel/antd.git",
+    "webpanel-antd": "^0.2.0",
     "webpanel-data": "^0.2.7"
   }
 }

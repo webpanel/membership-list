@@ -1,6 +1,7 @@
 import * as React from "react";
 
 import { Button, List, Popconfirm, Popover, Select } from "antd";
+import { DeleteOutlined, UserOutlined } from "@ant-design/icons";
 
 import { SelectProps } from "antd/lib/select";
 
@@ -46,7 +47,7 @@ export class MembershipListComponent extends React.Component<
                   title="Are you sure?"
                   okText="Yes"
                   cancelText="No"
-                  icon="user"
+                  icon={<UserOutlined />}
                   onConfirm={() => {
                     if (onDelete) {
                       (async function () {
@@ -57,7 +58,7 @@ export class MembershipListComponent extends React.Component<
                 >
                   <Button
                     key="delete"
-                    icon="delete"
+                    icon={<DeleteOutlined />}
                     size="small"
                     danger={true}
                   />
