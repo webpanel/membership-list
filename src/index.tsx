@@ -16,6 +16,7 @@ interface IMembershipListProps {
   entity: string;
   entityID: string;
   roles?: IMembershipListRole[];
+  readonly?: boolean;
 }
 
 const MEMBERSHIPS_QUERY = gql`
@@ -60,7 +61,7 @@ export const MembershipList = (props: IMembershipListProps) => {
   const [form] = Form.useForm();
   const [inviting, setInviting] = React.useState(false);
 
-  const { entity, entityID, roles } = props;
+  const { entity, entityID, roles, readonly } = props;
 
   const rolesSelect = (props: {
     roles?: IMembershipListRole[];
@@ -87,6 +88,7 @@ export const MembershipList = (props: IMembershipListProps) => {
               loading={loading}
               memberships={data.memberships}
               roles={roles || []}
+              readonly={readonly}
               onDelete={async (id) => {
                 await deleteMembership({
                   variables: { id },
@@ -94,65 +96,67 @@ export const MembershipList = (props: IMembershipListProps) => {
                 refetch();
               }}
               footer={
-                <div style={{ padding: "8px 16px" }}>
-                  <Mutation mutation={INVITE_MEMBER}>
-                    {(inviteMember: MutationFunction<any, any>) => (
-                      <Form
-                        form={form}
-                        onFinish={async (values) => {
-                          setInviting(true);
-                          try {
-                            await Promise.all(
-                              values.members.map((m: string) =>
-                                inviteMember({
-                                  variables: {
-                                    email: m,
-                                    role: values.role,
-                                    entity,
-                                    entityID,
-                                  },
-                                })
-                              )
-                            );
-                          } catch (e) {
-                            global.console.log("failed to add", e);
-                          } finally {
-                            setInviting(false);
-                            form.resetFields();
-                          }
-                          refetch();
-                        }}
-                      >
-                        <Form.Item name="members">
-                          <Select
-                            mode="tags"
-                            style={{ width: "250px" }}
-                            // size=""
-                            notFoundContent=""
-                            tokenSeparators={[" ", ","]}
-                            placeholder="type email addreses"
-                          />
-                        </Form.Item>
-                        {roles && (
-                          <Form.Item
-                            label="role"
-                            rules={[{ required: true }]}
-                            name="role"
-                          >
-                            {rolesSelect({ roles })}
-                          </Form.Item>
-                        )}{" "}
-                        <Button
-                          type="primary"
-                          htmlType="submit"
-                          loading={inviting}
+                !readonly && (
+                  <div style={{ padding: "8px 16px" }}>
+                    <Mutation mutation={INVITE_MEMBER}>
+                      {(inviteMember: MutationFunction<any, any>) => (
+                        <Form
+                          form={form}
+                          onFinish={async (values) => {
+                            setInviting(true);
+                            try {
+                              await Promise.all(
+                                values.members.map((m: string) =>
+                                  inviteMember({
+                                    variables: {
+                                      email: m,
+                                      role: values.role,
+                                      entity,
+                                      entityID,
+                                    },
+                                  })
+                                )
+                              );
+                            } catch (e) {
+                              global.console.log("failed to add", e);
+                            } finally {
+                              setInviting(false);
+                              form.resetFields();
+                            }
+                            refetch();
+                          }}
                         >
-                          Add
-                        </Button>
-                      </Form>
-                    )}
-                  </Mutation>
-                </div>
+                          <Form.Item name="members">
+                            <Select
+                              mode="tags"
+                              style={{ width: "250px" }}
+                              // size=""
+                              notFoundContent=""
+                              tokenSeparators={[" ", ","]}
+                              placeholder="type email addreses"
+                            />
+                          </Form.Item>
+                          {roles && (
+                            <Form.Item
+                              label="role"
+                              rules={[{ required: true }]}
+                              name="role"
+                            >
+                              {rolesSelect({ roles })}
+                            </Form.Item>
+                          )}{" "}
+                          <Button
+                            type="primary"
+                            htmlType="submit"
+                            loading={inviting}
+                          >
+                            Add
+                          </Button>
+                        </Form>
+                      )}
+                    </Mutation>
+                  </div>
+                )
               }
             />
           )}

@@ -17,6 +17,7 @@ interface IMembershipListProps {
     memberships: IMembership[];
     roles: IMembershipListRole[];
     onDelete: (id: string) => Promise<void>;
+    readonly?: boolean;
 }
 export declare class MembershipListComponent extends React.Component<IMembershipListProps> {
     render(): JSX.Element;

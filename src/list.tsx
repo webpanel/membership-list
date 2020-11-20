@@ -22,13 +22,19 @@ interface IMembershipListProps {
   memberships: IMembership[];
   roles: IMembershipListRole[];
   onDelete: (id: string) => Promise<void>;
+  readonly?: boolean;
 }
 
-export class MembershipListComponent extends React.Component<
-  IMembershipListProps
-> {
+export class MembershipListComponent extends React.Component<IMembershipListProps> {
   public render() {
-    const { loading, footer, memberships, roles, onDelete } = this.props;
+    const {
+      loading,
+      footer,
+      memberships,
+      roles,
+      onDelete,
+      readonly,
+    } = this.props;
 
     return (
       <List
@@ -42,27 +48,29 @@ export class MembershipListComponent extends React.Component<
           return (
             <List.Item
               actions={[
-                <Popconfirm
-                  key="delete"
-                  title="Are you sure?"
-                  okText="Yes"
-                  cancelText="No"
-                  icon={<UserOutlined />}
-                  onConfirm={() => {
-                    if (onDelete) {
-                      (async function () {
-                        await onDelete(item.id);
-                      })();
-                    }
-                  }}
-                >
-                  <Button
+                !readonly && (
+                  <Popconfirm
                     key="delete"
-                    icon={<DeleteOutlined />}
-                    size="small"
-                    danger={true}
-                  />
-                </Popconfirm>,
+                    title="Are you sure?"
+                    okText="Yes"
+                    cancelText="No"
+                    icon={<UserOutlined />}
+                    onConfirm={() => {
+                      if (onDelete) {
+                        (async function () {
+                          await onDelete(item.id);
+                        })();
+                      }
+                    }}
+                  >
+                    <Button
+                      key="delete"
+                      icon={<DeleteOutlined />}
+                      size="small"
+                      danger={true}
+                    />
+                  </Popconfirm>
+                ),
               ]}
             >
               <List.Item.Meta
