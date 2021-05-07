@@ -10,11 +10,20 @@ interface IMembershipListRole {
   name: string;
 }
 
+interface IMember {
+  id: string;
+  email: string;
+  [key: string]: any;
+}
 interface IMembership {
   id: string;
   role: string;
-  member: { id: string; email: string };
+  member: IMember;
 }
+
+export type IPopoverContentHandler = (
+  memberships: IMembership
+) => React.ReactNode;
 
 interface IMembershipListProps {
   loading: boolean;
@@ -23,6 +32,7 @@ interface IMembershipListProps {
   roles: IMembershipListRole[];
   onDelete: (id: string) => Promise<void>;
   readonly?: boolean;
+  popoverContent?: IPopoverContentHandler;
 }
 
 export class MembershipListComponent extends React.Component<IMembershipListProps> {
@@ -34,6 +44,7 @@ export class MembershipListComponent extends React.Component<IMembershipListProp
       roles,
       onDelete,
       readonly,
+      popoverContent,
     } = this.props;
 
     return (
@@ -75,7 +86,13 @@ export class MembershipListComponent extends React.Component<IMembershipListProp
             >
               <List.Item.Meta
                 title={
-                  <Popover content={`ID: ${item.member.id}`}>
+                  <Popover
+                    content={
+                      popoverContent
+                        ? popoverContent(item)
+                        : `ID: ${item.member.id}`
+                    }
+                  >
                     {item.member.email}
                   </Popover>
                 }

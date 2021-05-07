@@ -1,9 +1,9 @@
 import * as React from "react";
 
 import { Button, Form, Select } from "antd";
+import { IPopoverContentHandler, MembershipListComponent } from "./list";
 import { Mutation, MutationFunction, Query, QueryResult } from "react-apollo";
 
-import { MembershipListComponent } from "./list";
 import { SelectProps } from "antd/lib/select";
 import gql from "graphql-tag";
 
@@ -17,9 +17,11 @@ interface IMembershipListProps {
   entityID: string;
   roles?: IMembershipListRole[];
   readonly?: boolean;
+  memberFields?: string[];
+  listPopoverContent?: IPopoverContentHandler;
 }
 
-const MEMBERSHIPS_QUERY = gql`
+const MEMBERSHIPS_QUERY = (fields?: string[]) => gql`
   query($entityID: ID!, $entity: String!) {
     memberships(entity: $entity, entityID: $entityID) {
       id
@@ -29,6 +31,7 @@ const MEMBERSHIPS_QUERY = gql`
         email
         given_name
         family_name
+        ${fields?.join(" ") || ""}
       }
     }
   }
@@ -61,7 +64,14 @@ export const MembershipList = (props: IMembershipListProps) => {
   const [form] = Form.useForm();
   const [inviting, setInviting] = React.useState(false);
 
-  const { entity, entityID, roles, readonly } = props;
+  const {
+    entity,
+    entityID,
+    roles,
+    readonly,
+    memberFields,
+    listPopoverContent,
+  } = props;
 
   const rolesSelect = (props: {
     roles?: IMembershipListRole[];
@@ -82,7 +92,10 @@ export const MembershipList = (props: IMembershipListProps) => {
   return (
     <Mutation mutation={DELETE_MEMBERSHIP_MUTATION}>
       {(deleteMembership: MutationFunction<any, any>) => (
-        <Query query={MEMBERSHIPS_QUERY} variables={{ entity, entityID }}>
+        <Query
+          query={MEMBERSHIPS_QUERY(memberFields)}
+          variables={{ entity, entityID }}
+        >
           {({ data, loading, refetch }: QueryResult<any>) => (
             <MembershipListComponent
               loading={loading}
@@ -95,6 +108,7 @@ export const MembershipList = (props: IMembershipListProps) => {
                 });
                 refetch();
               }}
+              popoverContent={listPopoverContent}
               footer={
                 !readonly && (
                   <div style={{ padding: "8px 16px" }}>
